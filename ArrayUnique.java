@@ -31,6 +31,26 @@ public class ArrayUnique {
 		return -1;
 	}
 
+	// by almost sorted array, the element may be put in the position that is right/left-shift by 1 from where it is supposed to be.
+	public static int binarySearchOverAlmostSortedArray(int[] array, int key) {
+		int left=0, right=array.length-1;
+		while (left <= right) {
+			int mid = left + (right-left)/2;
+			if (array[mid] == key)
+				return mid;
+			else if ((mid-1)>=left && array[mid-1]==key)
+				return mid-1;
+			else if ((mid+1)<=right && array[mid+1]==key)
+				return mid+1;
+			else if (array[mid] > key)
+				right = mid - 2;
+			else
+				left = mid + 2;
+		}
+		return -1;
+	}
+
+
 	public static void main(String[] args) {
 		int[] array = {1,2,2,6,5,4,7,9,4,6,7,8,0,0};
 		Arrays.sort(array);
@@ -42,6 +62,13 @@ public class ArrayUnique {
 		int key = 3;
 		int idx = binarySearch(uniq, key);
 		System.out.println("key " + key + " at index " + idx);
+
+		key = 40;
+		int[] brray = {10, 3, 40, 20, 50, 80, 70};
+		//int[] brray = {3, 2, 10, 4, 40};
+		idx = binarySearchOverAlmostSortedArray(brray, key);
+		System.out.println("key " + key + " at index " + idx);
+
 	}
 
 }
