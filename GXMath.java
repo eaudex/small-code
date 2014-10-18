@@ -24,10 +24,47 @@ public class GXMath {
 		return root;
 	}
 
-	public static void main(String[] args) {
 
+	// compute n^p (n raised to the power of p)
+	public static double pow(double n, int p) {
+		if (n == 0.0)
+			return 1.0;
+
+		if (p >= 0)
+			return _pow(n, p);
+		else
+			return 1.0/_pow(n, -p);
+	}
+
+	// n can be either positive or negative (must not be zero)
+	// p must be non-negative
+	private static double _pow(double n, int p) {
+		if (p == 0)
+			return 1.0;
+		else if (p == 1)
+			return n;
+
+		double i = _pow(n, p/2);
+		if (p % 2 == 0) {
+			return i*i;
+		}
+		else {
+			return i*i*n;
+		}
+	}
+
+	public static void main(String[] args) {
+		// sqrt
 		double s = sqrt(1000.0);
 		System.out.println(s);
 
+		// pow
+		System.out.println(pow(0.0, 0));
+		System.out.println(pow(0.0,-1));
+		System.out.println(pow(0.0,+1));
+
+		System.out.println(pow(2.0, 0));
+		System.out.println(pow(2.0,-5));
+		System.out.println(pow(2.0,+5));
 	}
 }
