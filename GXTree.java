@@ -75,7 +75,7 @@ class TreeNode {
 	public static int width(TreeNode v) {
 		GX.Pair<Integer,Integer> window = _width(v, 0);
 		System.out.println(window);
-		return window.value-window.key+1;
+		return window.getValue()-window.getKey()+1;
 	}
 
 	private static GX.Pair<Integer,Integer> _width(TreeNode v, int w) {
@@ -85,13 +85,13 @@ class TreeNode {
 		int min=w, max=w;
 		if (v.left != null) {
 			GX.Pair<Integer,Integer> window_left = _width(v.left, w-1);
-			min = Math.min(min, window_left.key);
-			max = Math.max(max, window_left.value);
+			min = Math.min(min, window_left.getKey());
+			max = Math.max(max, window_left.getValue());
 		}
 		if (v.right != null) {
 			GX.Pair<Integer,Integer> window_right = _width(v.right, w+1);
-			min = Math.min(min, window_right.key);
-			max = Math.max(max, window_right.value);
+			min = Math.min(min, window_right.getKey());
+			max = Math.max(max, window_right.getValue());
 		}
 
 		return new GX.Pair<Integer,Integer>(min, max);
@@ -100,8 +100,8 @@ class TreeNode {
 	public static void printVerticalOrder(TreeNode v) {
 		GX.Pair<Integer,Integer> window = _width(v, 0);
 		System.out.println(window);
-		int min = window.key.intValue();
-		int max = window.value.intValue();
+		int min = window.getKey().intValue();
+		int max = window.getValue().intValue();
 		for (int i=min; i<=max; ++i) {
 			System.out.print("[" + i + "]");
 			_printVerticalOrder(v, 0, i);

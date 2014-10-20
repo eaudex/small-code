@@ -3,13 +3,21 @@
 public class GX {
 
 	// static nested class, accessible from outside class GX
-	public static class Pair<S,T> {
-		public S key;
-		public T value;
+	// make it immutable
+	public static final class Pair<S,T> {
+		private S key;
+		private T value;
 
 		public Pair(S k, T v) {
 			key = k;
 			value = v;
+		}
+
+		public S getKey() {
+			return key;
+		}
+		public T getValue() {
+			return value;
 		}
 
 		@Override
