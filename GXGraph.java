@@ -67,7 +67,7 @@ public class GXGraph {
 		System.out.println("G<V,E> |V|=" + V + " |E|=" + E);
 		for (int i=0; i<V; ++i) {
 			Set<Integer> adjs = adjLists.get(i);
-			System.out.println("Node " + i + "\t->\t" + adjs);
+			System.out.println("Node " + i + "\t->\t" + adjs + "\t(deg=" + degree(i) + ")");
 		}
 	}
 

@@ -2,35 +2,37 @@ import java.util.*;
 import java.util.Map.*;
 
 class TreeNode {
-	private int data;
-	private TreeNode left;
-	private TreeNode right;
+	public int data;
+	public TreeNode left;
+	public TreeNode right;
 	public TreeNode(int d) {
 		data = d;
 		left = null;
 		right = null;
 	}
 
-	public static TreeNode genBST(int n) {
+	// gen random binary search tree
+	public static TreeNode genRandomBST(int n) {
 		Random rnd = new Random();
 		int[] array = new int[n];
 		for (int i=0; i<n; ++i)
 			array[i] = rnd.nextInt(100);
 		Arrays.sort(array);
 		System.out.println(Arrays.toString(array));
-		TreeNode root = _genBST(array, 0, array.length-1);
+		TreeNode root = _genRandomBST(array, 0, array.length-1);
 		return root;
 	}
-	private static TreeNode _genBST(int[] array, int idx, int jdx) {
+	private static TreeNode _genRandomBST(int[] array, int idx, int jdx) {
 		if (idx > jdx)
 			return null;
 		int mdx = idx + (jdx-idx)/2;
 		TreeNode root = new TreeNode(array[mdx]);
-		root.left = _genBST(array, idx, mdx-1);
-		root.right = _genBST(array, mdx+1, jdx);
+		root.left = _genRandomBST(array, idx, mdx-1);
+		root.right = _genRandomBST(array, mdx+1, jdx);
 		return root;
 	}
 
+	// print a tree in in-order manner with proper indentation
 	public static void printInOrder(TreeNode root) {
 		System.out.println("[InOrderTree]");
 		_printInOrder(root, 0);
@@ -52,7 +54,7 @@ class TreeNode {
 		_printInOrder(v.right, depth+1);
 	}
 
-	//
+	// find tree depth (defined as # horizontal levels)
 	public static int depth(TreeNode v) {
 		int d = _depth(v, 1);
 		System.out.println("[TreeDepth] " + d);
@@ -71,13 +73,13 @@ class TreeNode {
 		return max_depth;
 	}
 
-	//
+	// find tree width (defined as # vertical levels)
 	public static int width(TreeNode v) {
 		GX.Pair<Integer,Integer> window = _width(v, 0);
-		System.out.println(window);
-		return window.getValue()-window.getKey()+1;
+		int w = window.getValue()-window.getKey()+1;
+		System.out.println("[TreeWidth] " + w);
+		return w;
 	}
-
 	private static GX.Pair<Integer,Integer> _width(TreeNode v, int w) {
 		if (v == null)
 			return null;
@@ -97,9 +99,10 @@ class TreeNode {
 		return new GX.Pair<Integer,Integer>(min, max);
 	}
 
+	// print a tree in vertical order
 	public static void printVerticalOrder(TreeNode v) {
 		GX.Pair<Integer,Integer> window = _width(v, 0);
-		System.out.println(window);
+		System.out.println("[VerticalOrder] window=" + window);
 		int min = window.getKey().intValue();
 		int max = window.getValue().intValue();
 		for (int i=min; i<=max; ++i) {
@@ -108,7 +111,6 @@ class TreeNode {
 			System.out.println();
 		}
 	}
-
 	private static void _printVerticalOrder(TreeNode v, int w, int pos) {
 		if (v == null)
 			return;
@@ -118,17 +120,48 @@ class TreeNode {
 		_printVerticalOrder(v.left, w-1, pos);
 		_printVerticalOrder(v.right, w+1, pos);
 	}
-
 }
+
 
 public class GXTree {
 
+	public static void serialize(TreeNode root, LinkedList<String> out) {
+		if (root == null) {
+			out.offer("_");
+			return;
+		}
+
+		out.offer(String.valueOf(root.data));
+		serialize(root.left, out);
+		serialize(root.right, out);
+	}
+
+	public static TreeNode deserialize(LinkedList<String> in) {
+		if (in.size()<=0 || in.peek().equals("_")) {
+			in.poll();
+			return null;
+		}
+
+		TreeNode n = new TreeNode(Integer.parseInt(in.poll()));
+		n.left = deserialize(in);
+		n.right = deserialize(in);
+		return n;
+	}
+
 	public static void main(String[] args) {
-		TreeNode root = TreeNode.genBST(10);
+		TreeNode root = TreeNode.genRandomBST(10);
 		TreeNode.printInOrder(root);
 		int depth = TreeNode.depth(root);
 		int width = TreeNode.width(root);
 		TreeNode.printVerticalOrder(root);
+
+		// serialize & deserialize
+		LinkedList<String> out = new LinkedList<String>();
+		serialize(root, out);
+		System.out.println(out);
+
+		TreeNode root2 = deserialize(out);
+		root2.printInOrder(root2);
 	}
 
 }
