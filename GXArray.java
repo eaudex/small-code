@@ -30,6 +30,24 @@ public class GXArray {
 			swap(array, i, len-i-1);
 	}
 
+	// [Time] O(n*n!)
+	public static void permute(int[] array) {
+		System.out.println("---");
+		_permute(array, 0);
+		System.out.println("---");
+	}
+	private static void _permute(int[] array, int idx) {
+		if (idx >= array.length-1) {
+			System.out.println(Arrays.toString(array));
+			return;
+		}
+		for (int i=idx; i<array.length; ++i) {
+			GXArray.swap(array, idx, i);
+			_permute(array, idx+1);
+			GXArray.swap(array, idx, i);
+		}
+	}
+
 	// find the first element that appears more than once in an array
 	public static int findFirstRepeat(int[] array) {
 		if (array==null || array.length<=0)
@@ -262,12 +280,14 @@ public class GXArray {
 
 
 	public static void main(String[] args) {
-		int[] array = {1,2,3,4,5};
+		int[] array = {1,2,3};
 		System.out.println(Arrays.toString(array));
 
 		// reverse
 		reverse(array);
 		System.out.println(Arrays.toString(array));
+
+		permute(array);
 
 		// PriorityQueue<E> practice
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
