@@ -14,18 +14,36 @@ public class GXArray {
 		array[j] = tmp;
 	}
 	*/
-
 	public static void swap(int[] array, int i, int j) {
 		int tmp = array[i];
 		array[i] = array[j];
 		array[j] = tmp;
 	}
 
+	// reverse an array
 	public static void reverse(int[] array) {
+		if (array==null || array.length<=1)
+			return;
+
 		int len = array.length;
-		for (int i=0; i<len/2; ++i) {
+		for (int i=0; i<len/2; ++i)
 			swap(array, i, len-i-1);
+	}
+
+	// find the first element that appears more than once in an array
+	public static int findFirstRepeat(int[] array) {
+		if (array==null || array.length<=0)
+			return -1;
+
+		int minIdx = -1;
+		Set<Integer> visits = new HashSet<Integer>(array.length);
+		for (int i=array.length-1; i>=0; --i) {
+			if ( ! visits.contains(array[i]))
+				visits.add(array[i]);
+			else
+				minIdx = i;
 		}
+		return minIdx;
 	}
 
 	private static final class TripletCMP implements Comparator<GX.Triplet<Integer,Integer,Integer>> {
@@ -64,7 +82,9 @@ public class GXArray {
 		return output;
 	}
 
-	// in O(n^2) time, O(1) space
+	// alternative rearrange
+	// [Time] O(n^2)
+	// [Space] O(1)
 	public static boolean alternatingRearrange(int[] data) {
 		if (data == null)
 			return false;
@@ -92,26 +112,174 @@ public class GXArray {
 		return true;
 	}
 
+	// Bubble Sort
+	// [Time] best: O(n), average: O(n^2), worse: O(n^2)
+	// [Space] O(1)
+	// in-place, stable?
+	public static void bubleSort(int[] array) {
+		if (array==null || array.length<=1)
+			return;
+		boolean isSwap = true;
+		while (isSwap) {
+			isSwap = false;
+			for (int i=1; i<array.length; ++i) {
+				if (array[i-1] > array[i]) {
+					GXArray.swap(array, i-1, i);
+					isSwap = true;
+				}
+			}
+		}
+		System.out.println(Arrays.toString(array));
+	}
+
+	// Selection Sort
+	// [Time] best: O(n^2), average: O(n^2), worst: O(n^2)
+	// [Space] O(1)
+	// in-place, stable?
+	public static void selectSort(int[] array) {
+		if (array==null || array.length<=1)
+			return;
+		for (int i=0; i<array.length; ++i) {
+			int minIdx = i;
+			int minVal = array[i];
+			for (int j=i+1; j<array.length; ++j) {
+				if (minVal > array[j]) {
+					minIdx = j;
+					minVal = array[j];
+				}
+			}
+			if (i != minIdx)
+				GXArray.swap(array, i, minIdx);
+		}
+		System.out.println(Arrays.toString(array));
+	}
+
+
+	// Insertion Sort
+	// [Time] best: O(n), average: O(n^2),  worse: O(n^2)
+	// [Space] O(1)
+	// in-place, stable
+	public static void insertSort(int[] array) {
+		if (array==null || array.length<=1)
+			return;
+		for (int i=1; i<array.length; ++i) {
+			for (int j=i-1; j>=0; --j) {
+				if (array[j] > array[j+1])
+					GXArray.swap(array, j, j+1);
+				else
+					break;
+			}
+		}
+		System.out.println(Arrays.toString(array));
+	}
+
+	// Merge Sort
+	// [Time] best O(n*log(n)), average O(n*log(n)), worse O(n*log(n))
+	// [Space] `O(n)`
+	// stable
+	public static void mergeSort(int[] array) {
+		_mergeSort(array, 0, array.length-1);
+		System.out.println(Arrays.toString(array));
+	}
+	private static void _mergeSort(int[] array, int idx, int jdx) {
+		if (idx >= jdx)
+			return;
+		int mdx = idx + (jdx-idx)/2;
+		_mergeSort(array, idx, mdx);
+		_mergeSort(array, mdx+1, jdx);
+		_merge(array, idx, mdx, mdx+1, jdx);
+	}
+	private static void _merge(int[] array, int idxStart, int idxEnd, int jdxStart, int jdxEnd) {
+		int iLen = (idxEnd-idxStart) + 1;
+		int jLen = (jdxEnd-jdxStart) + 1;
+		int[] sorted = new int[iLen+jLen];
+
+		int idx=idxStart, jdx=jdxStart, kdx=0;
+		while (idx<=idxEnd && jdx<=jdxEnd) {
+			if (array[idx] > array[jdx]) {
+				sorted[kdx] = array[jdx];
+				jdx += 1;
+				kdx += 1;
+			}
+			else {
+				sorted[kdx] = array[idx];
+				idx += 1;
+				kdx += 1;
+			}
+		}
+		while (idx <= idxEnd) {
+			sorted[kdx] = array[idx];
+			idx += 1;
+			kdx += 1;
+		}
+		while (jdx <= jdxEnd) {
+			sorted[kdx] = array[jdx];
+			jdx += 1;
+			kdx += 1;
+		}
+
+		int k = 0;
+		for (int i=idxStart; i<=idxEnd; ++i) {
+			array[i] = sorted[k];
+			k += 1;
+		}
+		for (int j=jdxStart; j<=jdxEnd; ++j) {
+			array[j] = sorted[k];
+			k += 1;
+		}
+	}
+
+	// Quick Sort
+	// [Time] best: O(n*log(n)), average: O(n*log(n)), worse: O(n^2)
+	// [Space] best: O(log(n)), average: O(log(n)), worse: O(n)
+	// not stable
+	public static void quickSort(int[] array) {
+		_quickSort(array, 0, array.length-1);
+		System.out.println(Arrays.toString(array));
+	}
+	private static void _quickSort(int[] array, int idx, int jdx) {
+		if (idx >= jdx)
+			return;
+		int pdx = _quickPartition(array, idx, jdx);
+		_quickSort(array, idx, pdx-1);
+		_quickSort(array, pdx+1, jdx);
+	}
+	private static int _quickPartition(int[] array, int idx, int jdx) {
+		int mdx = idx + (jdx-idx)/2;
+		int mval = array[mdx];
+		GXArray.swap(array, mdx, jdx);
+
+		int j = idx;
+		for (int i=idx; i<jdx; ++i) {
+			if (array[i] < mval) {
+				GXArray.swap(array, i, j);
+				j += 1;
+			}
+		}
+		GXArray.swap(array, j, jdx);
+		return j;
+	}
+
 
 	public static void main(String[] args) {
 		int[] array = {1,2,3,4,5};
+		System.out.println(Arrays.toString(array));
 
 		// reverse
-		System.out.println(Arrays.toString(array));
 		reverse(array);
 		System.out.println(Arrays.toString(array));
 
-		//
+		// PriorityQueue<E> practice
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
 		pq.offer(2);
 		pq.offer(1);
 		pq.offer(11);
 		pq.offer(-1);
 		System.out.println(pq);
-
 		while (pq.size() > 0)
 			System.out.println(pq.poll());
 
+		// sorted matrix
 		int m=5, n=3;
 		int[][] mtx = new int[m][n];
 		mtx[0][0] = 1;
@@ -135,12 +303,25 @@ public class GXArray {
 			}
 			System.out.println();
 		}
-
+		// to sorted array
 		sortedMatrix2SortedArray(mtx);
 
 		int[] data = {-1,-2,3,4,-1,-4,-8,3,1,-9,-7};
 		boolean good = alternatingRearrange(data);
 		System.out.println("[" + good + "]	" + Arrays.toString(data));
+
+		// various sorting algorithms
+		bubleSort(data);
+		selectSort(data);
+		insertSort(data);
+		mergeSort(data);
+		quickSort(data);
+
+		int[] data2 = {6, 10, 5, 4, 9, 120, 4, 6, 10};
+		int minIdx = findFirstRepeat(data2);
+		System.out.println(Arrays.toString(data2) + " has " + data2[minIdx] + "@" + minIdx);
+
+
 	}
 
 }

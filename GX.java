@@ -27,6 +27,33 @@ public class GX {
 		}
 	}
 
+	public static final class Triplet<P,Q,R> {
+		private P one;
+		private Q two;
+		private R three;
+
+		public Triplet(P one, Q two, R three) {
+			this.one = one;
+			this.two = two;
+			this.three = three;
+		}
+
+		public P getOne() {
+			return one;
+		}
+		public Q getTwo() {
+			return two;
+		}
+		public R getThree() {
+			return three;
+		}
+
+		@Override
+		public String toString() {
+			return "(" + one + ", " + two + ", " + three + ")";
+		}
+	}
+
 	// Comparator<T> interface declares `compare(T,T)` to be overridden
 	// usage: Arrays.sort(Integer[], new IndexCMP(double[]))
 	public static class IndexCMP implements Comparator<Integer> {
@@ -48,6 +75,9 @@ public class GX {
 	public static void main(String[] args) {
 		GX.Pair<String,String> p = new GX.Pair<String,String>("my_key","my_value");
 		System.out.println(p);
+
+		GX.Triplet<Integer,Integer,Double> t = new GX.Triplet<Integer,Integer,Double>(1,2,3.14159);
+		System.out.println(t);
 	}
 
 }
