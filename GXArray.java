@@ -30,6 +30,7 @@ public class GXArray {
 			swap(array, i, len-i-1);
 	}
 
+	// permute given array
 	// [Time] O(n*n!)
 	public static void permute(int[] array) {
 		System.out.println("---");
@@ -46,6 +47,41 @@ public class GXArray {
 			_permute(array, idx+1);
 			GXArray.swap(array, idx, i);
 		}
+	}
+
+	// gen power set of given array
+	// [Time] O(2^n)
+	public static void powerset(int[] array) {
+		if (array.length > 32)
+			return;
+		System.out.println("-----------------");
+		_powerset(array, 0, 0);
+		System.out.println("-----------------");
+	}
+	private static void _powerset(int[] array, int idx, int sol) {
+		if (idx >= array.length) {
+			System.out.print("{ ");
+			for (int i=0; i<array.length; ++i) {
+				if ((sol&(1<<i)) > 0)
+					System.out.print(array[i] + " ");
+			}
+			System.out.println("}");
+			return;
+		}
+		_powerset(array, idx+1, sol);			//unset idx-th bit
+		_powerset(array, idx+1, (sol|(1<<idx)));//set idx-th bit
+	}
+
+	public static void subsetsum(int[] array) {
+		_subsetsum(array, 0, 0);
+	}
+	private static void _subsetsum(int[] array, int idx, int currSum) {
+		if (idx >= array.length) {
+			System.out.println("[subsum] " + currSum);
+			return;
+		}
+		_subsetsum(array, idx+1, currSum);
+		_subsetsum(array, idx+1, currSum+array[idx]);
 	}
 
 	// find the first element that appears more than once in an array
@@ -342,6 +378,8 @@ public class GXArray {
 		System.out.println(Arrays.toString(data2) + " has " + data2[minIdx] + "@" + minIdx);
 
 
+		powerset(data);
+		subsetsum(array);
 	}
 
 }
