@@ -1,4 +1,5 @@
 
+import java.util.*;
 
 public class GXMath {
 
@@ -53,6 +54,23 @@ public class GXMath {
 		}
 	}
 
+	public static int[] multiplyPolynomial(int[] a, int[] b) {
+		int m = a.length;
+		int n = b.length;
+
+		int l = (m-1+n-1)+1;
+		int[] p = new int[l];
+		for (int i=0; i<l; ++i)
+			p[i] = 0;
+
+		for (int i=0; i<m; ++i) {
+			for (int j=0; j<n; ++j) {
+				p[i+j] += a[i]*b[j];
+			}
+		}
+		return p;
+	}
+
 	public static void main(String[] args) {
 		// sqrt
 		double s = sqrt(1000.0);
@@ -66,5 +84,10 @@ public class GXMath {
 		System.out.println(pow(2.0, 0));
 		System.out.println(pow(2.0,-5));
 		System.out.println(pow(2.0,+5));
+
+		int[] p1 = {5,0,10,6};
+		int[] p2 = {1,2,4};
+		int[] p3 = multiplyPolynomial(p1,p2);
+		System.out.println(Arrays.toString(p3));
 	}
 }

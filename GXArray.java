@@ -314,6 +314,33 @@ public class GXArray {
 		return j;
 	}
 
+	public static void increaseSubsequence(int n, int k) {
+		if (n < 0)
+			return;
+		if (k <= 0)
+			return;
+		if (n < k)
+			return;
+		System.out.println("------------");
+		_increaseSubsequence(n, k, 0, 0);
+		System.out.println("============");
+	}
+	private static void _increaseSubsequence(int n, int k, int idx, int status) {
+		if (k <= 0) {
+			System.out.print("- ");
+			for (int i=0; i<n; ++i) {
+				if ((status&(1<<i)) > 0)
+					System.out.print(" " + i);
+			}
+			System.out.println();
+			return;
+		}
+		if (idx >= n)
+			return;
+
+		_increaseSubsequence(n, k, idx+1, status);
+		_increaseSubsequence(n, k-1, idx+1, (status|(1<<idx)));
+	}
 
 	public static void main(String[] args) {
 		int[] array = {1,2,3};
@@ -377,9 +404,10 @@ public class GXArray {
 		int minIdx = findFirstRepeat(data2);
 		System.out.println(Arrays.toString(data2) + " has " + data2[minIdx] + "@" + minIdx);
 
-
 		powerset(data);
 		subsetsum(array);
+
+		increaseSubsequence(5,3);
 	}
 
 }
