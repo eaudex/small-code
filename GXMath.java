@@ -71,6 +71,15 @@ public class GXMath {
 		return p;
 	}
 
+	// count points in the first quadrant which satisfy x^2 + y^2 < n
+	public static int countPointsInCircle(double n) {
+		int count = 0;
+		for (int x=0; x*x<n; ++x)
+			for (int y=0; x*x+y*y<n; ++y)
+				count += 1;
+		return count;
+	}
+
 	public static void main(String[] args) {
 		// sqrt
 		double s = sqrt(1000.0);
@@ -89,5 +98,9 @@ public class GXMath {
 		int[] p2 = {1,2,4};
 		int[] p3 = multiplyPolynomial(p1,p2);
 		System.out.println(Arrays.toString(p3));
+
+		int D = 6;
+		int pts = countPointsInCircle(D);
+		System.out.println("[PointsInCircle] " + pts);
 	}
 }
