@@ -3,6 +3,8 @@ import java.util.*;
 
 // undirected graph
 // adjacency-SET implementation
+// no self-loops
+// no multi-edges
 public class GXGraph {
 
 	private int V;
